@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	var feet = 10;
+	var meters = feet*3.28084;
+	var csrftoken = getCookie('csrftoken');
 	function writeMessage(canvas, message) {
 		var context = canvas.getContext('2d');
 		context.clearRect(0, 0, 200, 20);
@@ -90,6 +93,26 @@ $(document).ready(function(){
 			});
 		});
 	}
+	function eventSendToServer()
+	{
+		url = 'http://localhost:8000/process/';
+		data = {id:6};
+		$("#send-data-to-server").on("click",function(){
+			$.ajax({
+				url : url,
+				headers: {'X-CSRFToken':csrftoken},
+				type: "POST",
+				data : data,
+				dataType: 'json',
+				success:function(data, textStatus, jqXHR){
+					console.log(data);
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+			    	 console.log(textStatus);
+				}
+			});
+		});
+	}
 	function eventUnitReselect()
 	{
 		
@@ -100,8 +123,22 @@ $(document).ready(function(){
 		eventRectFormSubmit();
 		eventDrawStartPoint();
 		eventFirstUnitSelect();
+		eventSendToServer();
 	}
-	var feet = 10;
-	var meters = feet*3.28084;
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
 	eventRunAtStart();
 });
