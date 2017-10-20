@@ -2,12 +2,66 @@ $(document).ready(function(){
 	var feet = 10;
 	var meters = feet*3.28084;
 	var csrftoken = getCookie('csrftoken');
-	function writeMessage(canvas, message) {
-		var context = canvas.getContext('2d');
-		context.clearRect(0, 0, 200, 20);
-		context.font = '12pt Calibri';
-		context.fillStyle = 'black';
-		context.fillText(message, 5, 15);
+	var currentPoint = [];
+	var pointHistory = [];
+	var checkIfClose = false;
+	var currentlineindex = 0;
+	function writeMessage(canvas, message,mousePos) {
+		$("#main-canvas").removeLayer('coordinates');
+		$('#main-canvas').addLayer({
+			  type : 'text',
+			  fillStyle: '#9cf',
+			  strokeStyle: '#25a',
+			  strokeWidth: 2,
+			  name : 'coordinates',
+			  x: 80, y: 15,
+			  fontSize: 12,
+			  fontFamily: 'Calibri, sans-serif',
+			  text: message
+		});
+		if(checkIfClose)
+		{
+				x = mousePos.x;
+				y = mousePos.y;
+				$('#main-canvas').removeLayer('temp-line');
+				if((currentPoint.x<x+10 && currentPoint.x>x-10))
+				{
+					//alert("!");
+					$('#main-canvas').addLayer({
+					type : 'line',
+					strokeStyle: '#000',
+					strokeWidth: 2,
+					name : 'temp-line',
+					fillStyle: '#c33',
+					x1: currentPoint.x, y1: currentPoint.y,
+					x2: currentPoint.x, y2: mousePos.y,
+					});
+					$('#main-canvas').addLayer({
+						type : 'text',
+						fillStyle: '#9cf',
+						strokeStyle: '#25a',
+						strokeWidth: 2,
+						name : 'coordinates',
+						x: 80, y: 15,
+						fontSize: 12,
+						fontFamily: 'Calibri, sans-serif',
+						text: message
+					});
+				}
+				else if(currentPoint.y<y+10 && currentPoint.y>y-10)
+				{
+					$('#main-canvas').addLayer({
+					type : 'line',
+					strokeStyle: '#000',
+					strokeWidth: 2,
+					name : 'temp-line',
+					fillStyle: '#c33',
+					x1: currentPoint.x, y1: currentPoint.y,
+					x2: mousePos.x, y2: currentPoint.y,
+					});
+				}
+		}
+		$('#main-canvas').drawLayers();
 	}
 	function getMousePos(canvas, e) {
 		var rect = canvas.getBoundingClientRect();
@@ -21,7 +75,7 @@ $(document).ready(function(){
 		$('#main-canvas').on('mousemove',function(e) {
 			var mousePos = getMousePos(this, e);
 			var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-			writeMessage(this, message);
+			writeMessage(this, message,mousePos);
 		});
 	}
 	function appendNewInstruction(message)
@@ -41,6 +95,9 @@ $(document).ready(function(){
 		}).drawLayers();
 		$('#main-canvas').off('click');
 		appendNewInstruction('Now use the given tools to draw a layout of your house');
+		currentPoint = mousePos;
+		checkIfClose = true;
+		pointHistory.push(mousePos);
 	}
 	function eventRectFormSubmit()
 	{
@@ -68,7 +125,7 @@ $(document).ready(function(){
 				height: width
 		});
 		console.log($("#main-canvas")[0].getContext('2d'));
-		return false;
+		//return false;
 		});
 	}
 	function eventDrawStartPoint()
@@ -96,7 +153,9 @@ $(document).ready(function(){
 	function eventSendToServer()
 	{
 		url = 'http://localhost:8000/process/';
-		data = {id:6};
+		data = {
+			id:6,
+			};
 		$("#send-data-to-server").on("click",function(){
 			$.ajax({
 				url : url,
