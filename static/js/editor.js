@@ -7,8 +7,8 @@ $(document).ready(function(){
 	var tempPoint = [];
 	var drawTemp = false;
 	var layerIndex = 0;
-	var unit = "";
-	var boardsize = "";
+	var unit = "1";
+	var boardsize = "1";
 	function drawTempFigures(mousePos)
 	{
 		x = mousePos.x;
@@ -140,31 +140,6 @@ $(document).ready(function(){
 	}
 	function eventRectFormSubmit()
 	{
-		$("#rect-form").on("submit",function(event){
-			event.preventDefault();
-			data = $(this).serializeArray();
-			var length = data[0]['value'];
-			var width = data[1]['value'];
-			var unit = data[2]['value'];
-			if(unit=='meters')
-			{
-				length = length * meters;
-				width = width * meters;
-			}
-			if(unit=='feet')
-			{
-				length = length * feet;
-				width = width * feet;
-			}
-			$('#main-canvas').drawRect({
-					strokeStyle: '#c33',
-					strokeWidth: 1,
-					x: 100, y: 100,
-					width: length,
-					height: width
-			});
-		//return false;
-		});
 	}
 	function eventDrawStartPoint()
 	{
@@ -203,7 +178,9 @@ $(document).ready(function(){
 			  return result;
 			}, {})
 			results = JSON.stringify(results);
+			alert(unit);
 			data = {text:results,unit:unit,boardsize:boardsize};
+			alert(data['unit']);
 			$.ajax({
 				url : url,
 				headers: {'X-CSRFToken':csrftoken},
