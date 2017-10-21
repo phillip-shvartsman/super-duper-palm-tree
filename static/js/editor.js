@@ -7,15 +7,30 @@ $(document).ready(function(){
 	var tempPoint = [];
 	var drawTemp = false;
 	var layerIndex = 0;
+	var unit = "";
+	var boardsize = "";
 	function drawTempFigures(mousePos)
 	{
 		x = mousePos.x;
 		y = mousePos.y;
+		var toPrint;
+		var feet;
+		var inches;
 		$('#main-canvas').removeLayer('temp-line');
 		$('#main-canvas').removeLayer('temp-text');
 		if((currentPoint.x<x+10 && currentPoint.x>x-10))
 		{
-			//alert("!");
+			if(unit=='m')
+			{
+				toPrint = Math.abs(mousePos.y-currentPoint.y)/10 + 'meters';
+			}
+			if(unit=='f')
+			{
+				feet = Math.floor(Math.abs(mousePos.y-currentPoint.y)/12);
+				inches = Math.floor(Math.abs(mousePos.y-currentPoint.y)-feet*12);
+				toPrint = feet+"'"+inches+'"';
+			}
+			console.log(toPrint);
 			$('#main-canvas').addLayer({
 				type : 'line',
 				strokeStyle: '#000',
@@ -34,12 +49,22 @@ $(document).ready(function(){
 				x: currentPoint.x+10, y: mousePos.y,
 				fontSize: 12,
 				fontFamily: 'Calibri, sans-serif',
-				text: Math.abs(mousePos.y-currentPoint.y)/10 + 'meters'
+				text: toPrint
 			});
 			tempPoint = {x:currentPoint.x,y:mousePos.y};
 		}
 		else if(currentPoint.y<y+10 && currentPoint.y>y-10)
 		{
+			if(unit=='m')
+			{
+				toPrint = Math.abs(mousePos.x-currentPoint.x)/10 + 'meters';
+			}
+			if(unit=='f')
+			{
+				feet = Math.floor(Math.abs(mousePos.x-currentPoint.x)/12);
+				inches = Math.floor(Math.abs(mousePos.x-currentPoint.x)-feet*12);
+				toPrint = feet+"'"+inches+'"';
+			}
 			$('#main-canvas').addLayer({
 				type : 'line',
 				strokeStyle: '#000',
@@ -58,7 +83,7 @@ $(document).ready(function(){
 				x: mousePos.x, y: (currentPoint.y - 10),
 				fontSize: 12,
 				fontFamily: 'Calibri, sans-serif',
-				text: Math.abs(mousePos.x-currentPoint.x)/10 + 'meters'
+				text: toPrint
 			});
 			tempPoint = {x:mousePos.x,y:currentPoint.y};
 		}
@@ -85,8 +110,8 @@ $(document).ready(function(){
 	function getMousePos(canvas, e) {
 		var rect = canvas.getBoundingClientRect();
 		return {
-			x: e.clientX - rect.left,
-			y: e.clientY - rect.top
+			x: Math.floor(e.clientX - rect.left),//Floored to deal with Matt's issue
+			y: Math.floor(e.clientY - rect.top)
 		};
 	}
 	function eventCoordDisplay()
@@ -163,9 +188,10 @@ $(document).ready(function(){
 	function eventFirstUnitSelect()
 	{
 		$("#unit-select").on('click',function(){
-			var store = $("#unit-select").find('.active');
-			console.log(store);
-			$("#main-container").fadeIn('slow',function(){});
+			$("#main-container").fadeIn('slow',function(){
+				var store = $(".active").attr('name');
+				unit = store;
+			});
 		});
 	}
 	function eventSendToServer()
@@ -177,7 +203,7 @@ $(document).ready(function(){
 			  return result;
 			}, {})
 			results = JSON.stringify(results);
-			data = {text:results,unit:'meters'};
+			data = {text:results,unit:unit,boardsize:boardsize};
 			$.ajax({
 				url : url,
 				headers: {'X-CSRFToken':csrftoken},
@@ -213,6 +239,13 @@ $(document).ready(function(){
 			});
 			
 			$('#main-canvas').drawLayers();
+			if((currentPoint.x == pointHistory[0].x) && (currentPoint.y == pointHistory[0].y))
+			{
+				alert("!");
+				$('#main-canvas').off('click');
+				$('#main-canvas').off('mousemove');
+				appendNewInstruction('Now choose the board size that you have');
+			}
 		});
 	}
 	function eventRunAtStart()

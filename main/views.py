@@ -14,8 +14,10 @@ def index(request):
 	return render(request,'main/index.html',context)
 @csrf_exempt
 def process(request):
-	data = json.loads(request.POST['text']) #contains all the points .. access using data['0'] for first tuple .. data['0']['x'] for first
+	vertices = json.loads(request.POST['text']) #contains all the points .. access using data['0'] for first tuple .. data['0']['x'] for first
 		#tuples x value .. sadly they must be index using strings :(
-	print data 
+	boardsize = json.loads(request.POST['boardsize'])
+	units = json.loads(request.POST['unit'])
+	print len(data)
 	#return render(request,'main/index.html',context)
 	return JsonResponse({'foo':'Hello!'});
