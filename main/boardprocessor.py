@@ -64,5 +64,7 @@ def plotPrettyMatrix(matrix):
 	table = [fmt.format(*row) for row in s]
 	print '\n'.join(table)
 	##################################################
+	return 0
 def layBoards(matrix,boardSize):
 	#Takes in matrix
+	return 0
