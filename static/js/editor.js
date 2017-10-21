@@ -9,6 +9,11 @@ $(document).ready(function(){
 	var layerIndex = 0;
 	var unit = "1";
 	var boardsize = "1";
+	
+	var tempTextColor = "#008000"
+	var tempLineColor = "#FF0000"
+	var finalTextColor = "#0000FF";
+	var finalLineColor = "#000000";
 	function drawTempFigures(mousePos)
 	{
 		x = mousePos.x;
@@ -178,9 +183,7 @@ $(document).ready(function(){
 			  return result;
 			}, {})
 			results = JSON.stringify(results);
-			alert(unit);
 			data = {text:results,unit:unit,boardsize:boardsize};
-			alert(data['unit']);
 			$.ajax({
 				url : url,
 				headers: {'X-CSRFToken':csrftoken},
