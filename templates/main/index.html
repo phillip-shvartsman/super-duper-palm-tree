@@ -45,15 +45,46 @@
 			<div id="instruction" class="col-md-4">
 				<h3>Choose a starting point by clicking on the graph.</h3>
 			</div>
-			<div id="tools" class="col-md-4">
-				
+			<div id="board-size" class="col-md-4">
+				<form id="board-size-form-meters" style="display:none">
+					<div class="form-group">
+						<label for="length">Length in Centimeters</label>
+						<input type="number" class="form-control" name="length" aria-describedby="emailHelp" placeholder="Enter Length">
+					</div>
+					<div class="form-group">
+						<label for="width">Width in Centimeters</label>
+						<input type="number" class="form-control" name="width" placeholder="Enter Width">
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="optradio">Left to Right</label>
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="optradio">Up to Down</label>
+					</div>
+					<button id="board-size-submit" type="submit" class="btn btn-default">Submit</button>
+				</form>
+				<form id="board-size-form-feet"style="display:none">
+					<div class="form-group">
+						<label for="length">Length in Inches</label>
+						<input type="number" class="form-control" name="length" aria-describedby="emailHelp" placeholder="Enter Length">
+					</div>
+					<div class="form-group">
+						<label for="width">Width in Inches</label>
+						<input type="number" class="form-control" name="width" placeholder="Enter Width">
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="optradio">Left to Right</label>
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="optradio">Up to Down</label>
+					</div>
+					<button id="final-submit" type="submit" class="btn btn-default">Submit</button>
+				</form>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-8 col-md-offset-5">
 				<div class="btn-group">
-				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-rect-modal">Add Rectangle</button>
-				  <button type="button" class="btn btn-default">Add Custom Shape</button>
 				  <button id="clear-canvas" type="button" class="btn btn-default">Clear</button>
 				  <button id="send-data-to-server" type="button" class="btn btn-default">Send to Server</button>
 				</div>
