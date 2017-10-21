@@ -30,7 +30,7 @@ $(document).ready(function(){
 				inches = Math.floor(Math.abs(mousePos.y-currentPoint.y)-feet*12);
 				toPrint = feet+"'"+inches+'"';
 			}
-			console.log(toPrint);
+			
 			$('#main-canvas').addLayer({
 				type : 'line',
 				strokeStyle: '#000',
@@ -245,6 +245,14 @@ $(document).ready(function(){
 				$('#main-canvas').off('click');
 				$('#main-canvas').off('mousemove');
 				appendNewInstruction('Now choose the board size that you have');
+				if(unit=='f')
+				{
+					$("#board-size-form-feet").fadeIn('slow',function(){});
+				}
+				if(unit=='m')
+				{
+					$("#board-size-form-meters").fadeIn('slow',function(){});
+				}
 			}
 		});
 	}
