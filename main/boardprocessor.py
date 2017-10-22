@@ -1,3 +1,4 @@
+import numpy
 def matrixBuilder(size,vertices):
 	matrix = [[0 for i in range(size)] for k in range(size)]
 	#Set the points to one
@@ -55,7 +56,7 @@ def matrixBuilder(size,vertices):
 					#If you hit a wall set the fill boolean to true: you will fill the next block
 					fill=1
 					continue
-	return matrix
+	return numpy.asarray(matrix)
 def plotPrettyMatrix(matrix):
 	##Crazy code I got online#########################				
 	s = [[str(e) for e in row] for row in matrix]
@@ -65,6 +66,17 @@ def plotPrettyMatrix(matrix):
 	print '\n'.join(table)
 	##################################################
 	return 0
-def layBoards(matrix,boardSize):
+def layOneBoard(matrix,boardSize,a,b):
+	for i in range(boardSize.length):
+		for j in range(boardSize.width):
+			matrix[a+i][b+j] = 2
+def layBoards(matrix,boardSize,vertices):
 	#Takes in matrix
+	boardLoc = {x:0,y:0}
+	boards = {}
+	cuts = {}
+	for i in range(size):
+		for j in range(size):
+			if(matrix[i][j]==1):
+				layOneBoard(matrix,boardSize,i,j)
 	return 0

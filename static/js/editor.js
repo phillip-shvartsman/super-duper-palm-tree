@@ -182,6 +182,7 @@ $(document).ready(function(){
 			  result[index] = item; //a, b, c
 			  return result;
 			}, {})
+			boardsize = {length:12,width:6}
 			results = JSON.stringify(results);
 			data = {text:results,unit:unit,boardsize:boardsize};
 			$.ajax({

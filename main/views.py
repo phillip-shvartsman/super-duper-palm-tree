@@ -8,7 +8,9 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from boardprocessor import matrixBuilder
 from boardprocessor import plotPrettyMatrix
+from boardprocessor import layBoards
 import json
+import numpy
 # Create your views here.
 
 def index(request):
@@ -18,10 +20,11 @@ def index(request):
 def process(request):
 	vertices = json.loads(request.POST['text']) #contains all the points .. access using data['0'] for first tuple .. data['0']['x'] for first
 		#tuples x value .. sadly they must be index using strings :(
-	boardsize = json.loads(request.POST['boardsize'])
+	#boardSize = json.loads(request.POST['boardsize'])
 	size = 400
 	unit = request.POST['unit']
 	mainMatrix = matrixBuilder(size,vertices)
 	plotPrettyMatrix(mainMatrix)
+	layBoards(mainMatrix,boardSize,vertices)
 	##To return to server##
 	return JsonResponse({'foo':'Hello!',"numbBoard":6});
